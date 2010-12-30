@@ -72,6 +72,9 @@ class PasscodeRequest(models.Model):
 %s,
 
 Your APRS-IS passcode for %s is %s.
+
+Please write down the passcode or keep this message in a safe
+place in case you need to re-enter the passcode later.
 ''' % (self.full_name, self.callsign, self.passcode),
             settings.EMAIL_FROM,
             [self.email],
