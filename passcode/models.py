@@ -6,6 +6,7 @@ import re
 
 import callpass
 
+CALLSIGN_REGEX = r'^[a-z0-9]{3,7}$'
 LOCATOR_REGEX = r'^[a-z]{2}[0-9]{2}([a-z]{2})?$'
 
 class UpperCaseCharField(models.CharField):
@@ -14,7 +15,8 @@ class UpperCaseCharField(models.CharField):
 
 class PasscodeRequest(models.Model):
     full_name = models.CharField(max_length=100)
-    callsign = UpperCaseCharField(max_length=10, unique=True)
+    call_validator = RegexValidator(re.compile(CALLSIGN_REGEX, re.I), "You need to supply a valid callsign without an SSID!")
+    callsign = UpperCaseCharField(max_length=7, unique=True, validators=[call_validator])
     loc_validator = RegexValidator(re.compile(LOCATOR_REGEX, re.I), "You need to supply a valid QTH locator!")
     locator = models.CharField("Maidenhead locator", max_length=8, validators=[loc_validator])
     email = models.EmailField()
