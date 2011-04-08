@@ -63,19 +63,22 @@ class PasscodeRequest(models.Model):
         return self.passcode
     
     def approve(self):
+        from textwrap import dedent
         self.generate_passcode()
         self.status = 'approved'
         self.save()
         send_mail(
             'APRS-IS Passcode Approved!',
-            '''
-%s,
-
-Your APRS-IS passcode for %s is %s.
-
-Please write down the passcode or keep this message in a safe
-place in case you need to re-enter the passcode later.
-''' % (self.full_name, self.callsign, self.passcode),
+            dedent('''\
+		Dear %s,
+		
+		Your APRS-IS passcode for %s is %s.
+		
+		This passcode is valid for use with any SSID (1..15 or none).
+		
+		Please write down the passcode or keep this message in a safe
+		place in case you need to re-enter the passcode later.
+		''') % (self.full_name, self.callsign, self.passcode),
             settings.EMAIL_FROM,
             [self.email],
             fail_silently=False
