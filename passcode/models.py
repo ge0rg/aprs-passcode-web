@@ -118,7 +118,7 @@ Your APRS-IS passcode request for %s was denied.
     decision.allow_tags = True
 
     class Meta:
-        ordering = ['-submitted']
+        ordering = ['submitted']
     
     def __unicode__(self):
         return u'%s (%s)' % (self.full_name, self.callsign)
