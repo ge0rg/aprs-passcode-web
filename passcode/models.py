@@ -45,13 +45,13 @@ class PasscodeRequest(models.Model):
                 dedent('''\
                 %s (%s, %s) requested a passcode for %s:
                 %s
-                ''' % (
+                ''') % (
                     self.full_name,
                     self.email,
                     self.locator,
                     self.callsign,
                     self.comment,
-                )),
+                ),
                 settings.EMAIL_FROM,
                 settings.EMAIL_NOTIFY,
                 [], # BCC
