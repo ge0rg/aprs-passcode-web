@@ -9,6 +9,15 @@ import callpass
 CALLSIGN_REGEX = r'^[a-z0-9]{3,7}$'
 LOCATOR_REGEX = r'^[a-z]{2}[0-9]{2}([a-z]{2})?$'
 
+CLUB_DOMAINS = ['arrl.net', 'darc.de', 'jarl.com', 'sral.fi', 'amsat.org']
+
+def is_club(call, email):
+    for domain in CLUB_DOMAINS:
+	clubemail = call + '@' + domain
+        if email.lower() == clubemail.lower():
+            return True
+    return False
+
 class UpperCaseCharField(models.CharField):
     def to_python(self, value):
         return models.CharField.to_python(self, value.upper().strip())
@@ -39,6 +48,10 @@ class PasscodeRequest(models.Model):
     	    new_req = False
 
         super(PasscodeRequest, self).save()
+
+        if new_req and is_club(self.callsign, self.email):
+            self.approve()
+            new_req = False
 
     	if new_req:
             from textwrap import dedent
